@@ -34,7 +34,18 @@
     <div class="app-container">
         <!-- Left Toolbar -->
         <aside class="toolbar" id="toolbar" role="navigation" aria-label="PDF Tools">
-            <div class="toolbar-tools">
+            <!-- Resize Handle (Desktop) -->
+            <div class="toolbar-resize-handle" id="toolbarResizeHandle"></div>
+            
+            <!-- Expand Toggle (Mobile) -->
+            <button class="toolbar-expand-toggle" id="toolbarExpandToggle" aria-label="Expand toolbar">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="18 15 12 9 6 15"/>
+                </svg>
+            </button>
+            
+            <div class="toolbar-scroll-container" id="toolbarScrollContainer">
+                <div class="toolbar-tools">
                 <button class="tool-btn" data-tool="split" aria-label="Split PDF" tabindex="0">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="6" cy="6" r="3"/>
@@ -98,6 +109,51 @@
             
             <div class="toolbar-divider"></div>
             
+            <!-- Format Conversion Tools -->
+            <div class="toolbar-section">
+                <span class="toolbar-section-label">Convert</span>
+                
+                <button class="tool-btn" data-tool="pdf-to-images" aria-label="PDF to Images" tabindex="0">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <circle cx="8.5" cy="8.5" r="1.5"/>
+                        <polyline points="21 15 16 10 5 21"/>
+                    </svg>
+                    <span class="tooltip">Export as PNG/JPG</span>
+                </button>
+                
+                <button class="tool-btn" data-tool="images-to-pdf" aria-label="Images to PDF" tabindex="0">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    <span class="tooltip">Images to PDF</span>
+                </button>
+                
+                <button class="tool-btn" data-tool="pdf-to-word" aria-label="PDF to Word" tabindex="0">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    <span class="tooltip">Extract text to Word</span>
+                </button>
+                
+                <button class="tool-btn" data-tool="html-to-pdf" aria-label="HTML to PDF" tabindex="0">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"/>
+                        <polyline points="8 6 2 12 8 18"/>
+                    </svg>
+                    <span class="tooltip">Convert HTML to PDF</span>
+                </button>
+            </div>
+            
+            <div class="toolbar-divider"></div>
+            
             <div class="toolbar-download">
                 <button class="tool-btn" data-tool="download" aria-label="Download PDF" tabindex="0">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -108,6 +164,7 @@
                     <span class="tooltip">Save processed file</span>
                 </button>
             </div>
+            </div><!-- End toolbar-scroll-container -->
         </aside>
 
         <!-- Main Content Area -->
@@ -232,8 +289,28 @@
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- Core Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    
+    <!-- Optional Libraries for Conversion Tools -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/docx/8.2.0/docx.min.js"></script>
+    
+    <!-- Tool Scripts -->
+    <script src="tools/split.js"></script>
+    <script src="tools/merge.js"></script>
+    <script src="tools/compress.js"></script>
+    <script src="tools/rotate.js"></script>
+    <script src="tools/delete.js"></script>
+    <script src="tools/extract.js"></script>
+    <script src="tools/pdf-to-images.js"></script>
+    <script src="tools/images-to-pdf.js"></script>
+    <script src="tools/pdf-to-word.js"></script>
+    <script src="tools/html-to-pdf.js"></script>
+    
+    <!-- Main App -->
     <script src="app.js"></script>
 </body>
 </html>

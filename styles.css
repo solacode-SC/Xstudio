@@ -169,14 +169,141 @@ a:hover {
    ======================================== */
 .toolbar {
     width: var(--toolbar-width);
+    min-width: var(--toolbar-width);
+    max-width: 200px;
     height: 100%;
     background: var(--bg-white);
     border-right: 1px solid var(--border-color);
     box-shadow: var(--shadow-toolbar);
     display: flex;
     flex-direction: column;
-    padding: 16px 0;
+    padding: 0;
     z-index: 100;
+    position: relative;
+    transition: width 0.1s ease;
+}
+
+/* Scroll Container - Hidden scrollbar */
+.toolbar-scroll-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE/Edge */
+}
+
+.toolbar-scroll-container::-webkit-scrollbar {
+    display: none; /* Chrome/Safari/Opera */
+}
+
+/* Resize Handle (Desktop) */
+.toolbar-resize-handle {
+    position: absolute;
+    top: 0;
+    right: -4px;
+    width: 8px;
+    height: 100%;
+    cursor: ew-resize;
+    z-index: 101;
+    background: transparent;
+    transition: background var(--transition-fast);
+}
+
+.toolbar-resize-handle:hover,
+.toolbar-resize-handle.active {
+    background: var(--accent-primary);
+    opacity: 0.3;
+}
+
+.toolbar-resize-handle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 4px;
+    height: 40px;
+    border-radius: 2px;
+    background: var(--border-color);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+.toolbar-resize-handle:hover::after {
+    opacity: 1;
+    background: var(--accent-primary);
+}
+
+/* Expand Toggle (Mobile - Hidden on Desktop) */
+.toolbar-expand-toggle {
+    display: none;
+}
+
+/* Toolbar expanded state (desktop) */
+.toolbar.expanded {
+    width: auto;
+    min-width: 160px;
+}
+
+.toolbar.expanded .toolbar-tools,
+.toolbar.expanded .toolbar-section,
+.toolbar.expanded .toolbar-download {
+    align-items: stretch;
+    width: 100%;
+}
+
+.toolbar.expanded .tool-btn {
+    width: 100%;
+    padding: 10px 16px;
+    justify-content: flex-start;
+    gap: 12px;
+    border-radius: 0;
+}
+
+.toolbar.expanded .tool-btn::after {
+    content: attr(aria-label);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.toolbar.expanded .tool-btn:hover {
+    background: var(--accent-light);
+}
+
+.toolbar.expanded .tool-btn.active {
+    background: var(--accent-medium);
+}
+
+.toolbar.expanded .tool-btn.active::before {
+    left: 0;
+    height: 100%;
+    width: 3px;
+    border-radius: 0;
+}
+
+.toolbar.expanded .tooltip {
+    display: none !important;
+}
+
+.toolbar.expanded .toolbar-section-label {
+    display: block;
+    padding: 12px 16px 4px;
+    width: 100%;
+    text-align: left;
+    font-size: 10px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.toolbar.expanded .toolbar-divider {
+    width: 100%;
+    height: 1px;
+    margin: 8px 0;
 }
 
 .toolbar-tools {
@@ -702,6 +829,117 @@ a:hover {
 .form-input:focus {
     border-color: var(--accent-primary);
     outline: none;
+}
+
+/* Select dropdown */
+select.form-input {
+    cursor: pointer;
+    background: var(--bg-white);
+}
+
+/* Textarea */
+.form-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: var(--font-mono);
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color var(--transition-fast);
+}
+
+.form-textarea:focus {
+    border-color: var(--accent-primary);
+    outline: none;
+}
+
+/* Radio Group */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--bg-main);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.radio-option:hover {
+    background: var(--accent-light);
+}
+
+.radio-option input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-primary);
+    cursor: pointer;
+}
+
+.radio-option input[type="radio"]:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.radio-option input[type="radio"]:disabled + .radio-label {
+    opacity: 0.5;
+}
+
+.radio-label {
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+/* Checkbox Options */
+.checkbox-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.checkbox-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent-primary);
+    cursor: pointer;
+}
+
+.checkbox-label {
+    font-size: 13px;
+    color: var(--text-primary);
+}
+
+/* Toolbar Section Label */
+.toolbar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.toolbar-section-label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-light);
+    margin-bottom: 4px;
+    display: none; /* Hidden when collapsed */
+}
+
+.toolbar.expanded .toolbar-section-label,
+.toolbar.mobile-expanded .toolbar-section-label {
+    display: block;
 }
 
 .form-row {
@@ -1281,18 +1519,97 @@ a:hover {
     
     .toolbar {
         width: 100%;
+        max-width: 100%;
+        min-width: 100%;
         height: var(--toolbar-width-mobile);
-        flex-direction: row;
+        flex-direction: column;
         border-right: none;
         border-top: 1px solid var(--border-color);
         box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
         order: 2;
-        padding: 0 16px;
+        padding: 0;
+        transition: height 0.3s ease;
+        overflow: hidden;
+    }
+    
+    .toolbar.mobile-expanded {
+        height: 280px;
+    }
+    
+    /* Expand Toggle Button (Mobile) */
+    .toolbar-expand-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 28px;
+        background: var(--bg-main);
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-light);
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: all var(--transition-fast);
+    }
+    
+    .toolbar-expand-toggle:hover {
+        background: var(--accent-light);
+        color: var(--accent-primary);
+    }
+    
+    .toolbar-expand-toggle svg {
+        width: 20px;
+        height: 20px;
+        transition: transform 0.3s ease;
+    }
+    
+    .toolbar.mobile-expanded .toolbar-expand-toggle svg {
+        transform: rotate(180deg);
+    }
+    
+    /* Hide resize handle on mobile */
+    .toolbar-resize-handle {
+        display: none;
+    }
+    
+    /* Scroll container for mobile */
+    .toolbar-scroll-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 8px 16px;
+        overflow-x: auto;
+        overflow-y: hidden;
+        gap: 8px;
+        align-items: flex-start;
+        align-content: flex-start;
+    }
+    
+    .toolbar.mobile-expanded .toolbar-scroll-container {
+        overflow-y: auto;
+        overflow-x: hidden;
     }
     
     .toolbar-tools {
         flex-direction: row;
+        flex-wrap: wrap;
         gap: 4px;
+        flex: none;
+    }
+    
+    .toolbar-section {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    
+    .toolbar-section-label {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 0;
+    }
+    
+    .toolbar.mobile-expanded .toolbar-section {
+        width: 100%;
+        justify-content: center;
     }
     
     .toolbar-divider {
@@ -1301,13 +1618,24 @@ a:hover {
         margin: 0 8px;
     }
     
+    .toolbar.mobile-expanded .toolbar-divider {
+        width: 100%;
+        height: 1px;
+        margin: 8px 0;
+    }
+    
     .toolbar-download {
         padding: 0;
+        flex: none;
     }
     
     .tool-btn {
         width: 44px;
         height: 44px;
+    }
+    
+    .tool-btn.active::before {
+        display: none;
     }
     
     .tooltip {
