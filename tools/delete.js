@@ -7,12 +7,9 @@ function renderDeleteTool() {
     const selectedCount = AppState.selectedPages.size;
     
     let pageChips = '';
-    for (let i = 1; i <= Math.min(totalPages, 20); i++) {
+    for (let i = 1; i <= totalPages; i++) {
         const isSelected = AppState.selectedPages.has(i);
         pageChips += `<div class="page-chip ${isSelected ? 'selected' : ''}" data-page="${i}">Page ${i}</div>`;
-    }
-    if (totalPages > 20) {
-        pageChips += `<div class="page-chip" style="background: transparent;">+${totalPages - 20} more</div>`;
     }
     
     return `
@@ -62,7 +59,15 @@ function attachDeleteListeners() {
             renderToolPanel('delete');
         });
     });
-    document.getElementById('deleteBtn')?.addEventListener('click', processDelete);
+    document.getElementById('deleteBtn')?.addEventListener('click', () => {
+        const count = AppState.selectedPages.size;
+        if (count === 0) return;
+        showConfirmDialog(
+            'Delete Pages',
+            `Are you sure you want to delete ${count} page${count > 1 ? 's' : ''}? This cannot be undone.`,
+            processDelete
+        );
+    });
 }
 
 async function processDelete() {

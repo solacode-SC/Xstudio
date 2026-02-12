@@ -145,11 +145,6 @@ async function processPdfToWord() {
     }
 }
 
-function getBaseFileName() {
-    if (!AppState.pdfFile?.name) return 'document';
-    return AppState.pdfFile.name.replace('.pdf', '').replace('.PDF', '');
-}
-
 function downloadTextFile(text, filename) {
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);

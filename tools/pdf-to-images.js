@@ -154,11 +154,6 @@ async function processPdfToImages() {
     }
 }
 
-function getBaseFileName() {
-    if (!AppState.pdfFile?.name) return 'document';
-    return AppState.pdfFile.name.replace('.pdf', '').replace('.PDF', '');
-}
-
 function downloadDataUrl(dataUrl, filename) {
     const link = document.createElement('a');
     link.href = dataUrl;

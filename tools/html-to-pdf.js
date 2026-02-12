@@ -115,7 +115,7 @@ async function processHtmlToPdf() {
             const htmlContent = document.getElementById('htmlContent').value.trim();
             if (!htmlContent) {
                 showToast('Please enter HTML content', 'error');
-                showState('tool');
+                showState('preview');
                 return;
             }
             
@@ -141,7 +141,7 @@ async function processHtmlToPdf() {
             const url = document.getElementById('htmlUrl').value.trim();
             if (!url) {
                 showToast('Please enter a URL', 'error');
-                showState('tool');
+                showState('preview');
                 return;
             }
             

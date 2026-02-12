@@ -27,6 +27,13 @@ function renderCompressTool() {
                 <p style="font-size: 12px; color: var(--text-light);">Estimated reduction</p>
                 <p style="font-size: 24px; font-weight: 600; color: var(--success);" id="reductionEstimate">~40%</p>
             </div>
+            <div class="warning-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                </svg>
+                <p>Compression converts pages to images. Text will no longer be selectable or searchable.</p>
+            </div>
             <button class="btn-primary" id="compressBtn" style="width: 100%;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
                     <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>

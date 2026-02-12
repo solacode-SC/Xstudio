@@ -161,6 +161,9 @@ function showState(stateName) {
             DOM.errorContainer.classList.remove('hidden');
             break;
     }
+
+    // Close mobile toolbar drawer when changing state
+    closeMobileToolbar();
 }
 
 function setProgress(percent) {
@@ -235,7 +238,7 @@ function initUploadZone() {
     // Retry
     DOM.retryBtn.addEventListener('click', () => {
         if (AppState.currentTool) {
-            processTool(AppState.currentTool);
+            selectTool(AppState.currentTool);
         }
     });
 }
@@ -362,6 +365,10 @@ function resetApp() {
     DOM.fileInput.value = '';
     DOM.thumbnailsGrid.innerHTML = '';
     clearToolSelection();
+    // Clean up images-to-pdf state
+    if (typeof imagesToConvert !== 'undefined') {
+        imagesToConvert = [];
+    }
     showState('upload');
 }
 
@@ -398,6 +405,9 @@ function selectTool(tool) {
     }
     
     AppState.currentTool = tool;
+    
+    // Close mobile toolbar drawer after selection
+    closeMobileToolbar();
     
     // Handle tool
     if (tool === 'download') {
@@ -534,6 +544,36 @@ function attachToolListeners(tool) {
 }
 
 // ========================================
+// Confirm Dialog
+// ========================================
+function showConfirmDialog(title, message, onConfirm) {
+    const overlay = document.createElement('div');
+    overlay.className = 'confirm-overlay';
+    overlay.innerHTML = `
+        <div class="confirm-dialog">
+            <h3>${title}</h3>
+            <p>${message}</p>
+            <div class="confirm-actions">
+                <button class="btn-secondary" id="confirmCancel">Cancel</button>
+                <button class="btn-danger" id="confirmOk">Delete</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('#confirmCancel').addEventListener('click', () => {
+        overlay.remove();
+    });
+    overlay.querySelector('#confirmOk').addEventListener('click', () => {
+        overlay.remove();
+        onConfirm();
+    });
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.remove();
+    });
+}
+
+// ========================================
 // Error Handler
 // ========================================
 function showError(message) {
@@ -599,17 +639,21 @@ function initKeyboardShortcuts() {
             }
         }
         
-        // Escape: Close tool panel
+        // Escape: Close tool panel or mobile toolbar
         if (e.key === 'Escape') {
-            if (!DOM.toolPanel.classList.contains('hidden')) {
+            if (document.getElementById('toolbar')?.classList.contains('mobile-open')) {
+                closeMobileToolbar();
+            } else if (!DOM.toolPanel.classList.contains('hidden')) {
                 DOM.toolPanel.classList.add('hidden');
                 DOM.actionHint.classList.remove('hidden');
                 clearToolSelection();
             }
         }
         
-        // Number keys 1-6: Select tools
-        if (!e.metaKey && !e.ctrlKey && !e.altKey) {
+        // Number keys 1-6: Select tools (skip if user is typing in an input)
+        const tag = e.target.tagName.toLowerCase();
+        const isEditable = tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable;
+        if (!e.metaKey && !e.ctrlKey && !e.altKey && !isEditable) {
             const tools = ['split', 'merge', 'compress', 'rotate', 'delete', 'download'];
             const num = parseInt(e.key);
             if (num >= 1 && num <= 6) {
@@ -724,6 +768,41 @@ DOM.downloadBtn?.addEventListener('click', () => {
 });
 
 // ========================================
+// Mobile Menu Toggle
+// ========================================
+function initMobileMenu() {
+    // Create backdrop element
+    const backdrop = document.createElement('div');
+    backdrop.className = 'toolbar-backdrop';
+    backdrop.id = 'toolbarBackdrop';
+    document.querySelector('.app-container')?.prepend(backdrop);
+
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    menuBtn?.addEventListener('click', () => {
+        const toolbar = document.getElementById('toolbar');
+        toolbar?.classList.toggle('mobile-open');
+        backdrop.classList.toggle('visible');
+    });
+
+    backdrop.addEventListener('click', () => {
+        closeMobileToolbar();
+    });
+}
+
+function closeMobileToolbar() {
+    document.getElementById('toolbar')?.classList.remove('mobile-open');
+    document.getElementById('toolbarBackdrop')?.classList.remove('visible');
+}
+
+// ========================================
+// Shared Utility: Base file name
+// ========================================
+function getBaseFileName() {
+    if (!AppState.pdfFile) return 'document';
+    return AppState.pdfFile.name.replace(/\.pdf$/i, '');
+}
+
+// ========================================
 // Initialize Application
 // ========================================
 function init() {
@@ -731,9 +810,10 @@ function init() {
     initToolbar();
     initToolbarResize();
     initKeyboardShortcuts();
+    initMobileMenu();
     showState('upload');
     
-    console.log('📄 PDF Editor initialized!');
+    console.log('📄 Xstudio initialized!');
 }
 
 // Start the app
