@@ -69,6 +69,13 @@ async def process_files(
         else:
             raise HTTPException(status_code=400, detail=f"Unknown tool: {tool}")
 
+        if isinstance(result_file, dict):
+            return {
+                "success": True,
+                "type": "multi_result",
+                "results": result_file
+            }
+
         if not result_file or not os.path.exists(result_file):
             raise Exception("Processing failed to produce output")
 

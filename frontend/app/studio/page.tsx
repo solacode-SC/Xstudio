@@ -19,11 +19,17 @@ function StudioContent() {
   const [files, setFiles] = useState<File[]>([])
   const [config, setConfig] = useState({})
   const [processing, setProcessing] = useState(false)
-  const [result, setResult] = useState<{ url: string, name: string, size: number } | null>(null)
+  const [result, setResult] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
 
+  const isMulti = toolId === 'merge' || toolId === 'images_to_pdf'
+
   const handleUpload = (newFiles: File[]) => {
-    setFiles(prev => [...prev, ...newFiles])
+    if (isMulti) {
+      setFiles(prev => [...prev, ...newFiles])
+    } else {
+      setFiles(newFiles) // single file replaces
+    }
   }
   const handleRemove = (index: number) => {
     setFiles(prev => prev.filter((_, i) => i !== index))
@@ -35,7 +41,11 @@ function StudioContent() {
     setError(null)
     try {
       const res = await processFile(files, toolId, config)
-      setResult({ url: res.download_url, name: res.filename, size: res.size_bytes })
+      if (res.type === 'multi_result') {
+        setResult(res)
+      } else {
+        setResult({ url: res.download_url, name: res.filename, size: res.size_bytes })
+      }
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -91,9 +101,36 @@ function StudioContent() {
                  <span className="w-4 h-px bg-gray-200"></span>
                  <span className={`text-[11px] font-semibold uppercase tracking-wider px-3 py-1 rounded-full ${files.length>0 ? 'bg-black text-white' : 'bg-gray-100 text-gray-500'}`}>2. Configure</span>
               </div>
-              <UploadZone onUpload={handleUpload} files={files} onRemove={handleRemove} acceptType={toolId === 'images_to_pdf' ? 'image' : 'pdf'} />
-              {files.length > 0 && <ToolConfig toolId={toolId} onChange={setConfig} />}
+              <UploadZone 
+                onUpload={handleUpload} 
+                files={files} 
+                onRemove={handleRemove} 
+                acceptType={toolId === 'images_to_pdf' ? 'image' : 'pdf'} 
+                multiple={isMulti}
+                onReorder={isMulti ? setFiles : undefined}
+              />
+              {files.length > 0 && <ToolConfig toolId={toolId} value={config} onChange={setConfig} />}
             </>
+          ) : result && result.type === 'multi_result' ? (
+            <div className="pt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+               <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">Select Compression Level</h2>
+               <div className="flex flex-col gap-4">
+                 {[result.results.high, result.results.medium, result.results.low].map((opt, i) => (
+                   <div key={i} className="border border-gray-200 rounded-xl p-4 flex items-center justify-between bg-white hover:border-black transition-colors">
+                     <div>
+                       <h4 className="font-semibold text-[14px] text-gray-900">{opt.name}</h4>
+                       <p className="text-[12px] text-gray-500">{(opt.size_bytes / (1024*1024)).toFixed(2)} MB</p>
+                     </div>
+                     <a href={`http://127.0.0.1:8000${opt.url}`} download target="_blank" rel="noreferrer" className="bg-black text-white px-4 py-2 rounded-lg text-[13px] font-medium hover:bg-gray-800 shrink-0">
+                       Download
+                     </a>
+                   </div>
+                 ))}
+               </div>
+               <button onClick={reset} className="mt-8 text-[13px] text-gray-500 hover:text-black font-medium w-full text-center underline-offset-4 hover:underline">
+                 Start over →
+               </button>
+            </div>
           ) : (
             <div className="text-center pt-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
                <div className="w-16 h-16 bg-green-50 border border-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -120,7 +157,7 @@ function StudioContent() {
         </div>
       </main>
 
-      <PreviewPanel file={files[0] || null} />
+      <PreviewPanel files={files} toolId={toolId} config={config} onConfigChange={setConfig} />
     </div>
   )
 }

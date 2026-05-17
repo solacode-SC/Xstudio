@@ -1,9 +1,9 @@
 'use client'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { UploadCloud, X } from 'lucide-react'
+import { UploadCloud, X, GripVertical } from 'lucide-react'
 
-export default function UploadZone({ onUpload, files, onRemove, acceptType = 'pdf' }: { onUpload: (files: File[]) => void, files: File[], onRemove: (index: number) => void, acceptType?: 'pdf' | 'image' }) {
+export default function UploadZone({ onUpload, files, onRemove, acceptType = 'pdf', multiple = true, onReorder }: { onUpload: (files: File[]) => void, files: File[], onRemove: (index: number) => void, acceptType?: 'pdf' | 'image', multiple?: boolean, onReorder?: (newFiles: File[]) => void }) {
   const onDrop = useCallback((acceptedFiles: File[]) => {
     onUpload(acceptedFiles)
   }, [onUpload])
@@ -14,8 +14,36 @@ export default function UploadZone({ onUpload, files, onRemove, acceptType = 'pd
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
     onDrop,
-    accept: acceptConfig
+    accept: acceptConfig,
+    multiple
   })
+
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index)
+    e.dataTransfer.effectAllowed = 'move'
+    e.dataTransfer.setData('text/plain', index.toString())
+  }
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    
+    if (draggedIndex === null || draggedIndex === index || !onReorder) return
+    
+    const newFiles = [...files]
+    const draggedItem = newFiles[draggedIndex]
+    newFiles.splice(draggedIndex, 1)
+    newFiles.splice(index, 0, draggedItem)
+    
+    onReorder(newFiles)
+    setDraggedIndex(index)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null)
+  }
 
   return (
     <div className="w-full">
@@ -39,9 +67,19 @@ export default function UploadZone({ onUpload, files, onRemove, acceptType = 'pd
       {files.length > 0 && (
         <div className="mt-4 flex flex-col gap-2">
           {files.map((file, i) => (
-            <div key={i} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg bg-white">
-              <span className="text-[13px] font-medium text-gray-700 truncate">{file.name}</span>
-              <button onClick={() => onRemove(i)} className="text-gray-400 hover:text-gray-600">
+            <div 
+              key={`${file.name}-${i}`} 
+              draggable={!!onReorder}
+              onDragStart={(e) => handleDragStart(e, i)}
+              onDragOver={(e) => handleDragOver(e, i)}
+              onDragEnd={handleDragEnd}
+              className={`flex items-center justify-between p-3 border rounded-lg bg-white transition-all ${draggedIndex === i ? 'opacity-50 border-black shadow-sm' : 'border-gray-200'} ${onReorder ? 'cursor-grab active:cursor-grabbing' : ''}`}
+            >
+              <div className="flex items-center gap-3 overflow-hidden">
+                {onReorder && <GripVertical className="w-4 h-4 text-gray-400 shrink-0" />}
+                <span className="text-[13px] font-medium text-gray-700 truncate">{file.name}</span>
+              </div>
+              <button onClick={() => onRemove(i)} className="text-gray-400 hover:text-gray-600 shrink-0 ml-3">
                 <X className="w-4 h-4" />
               </button>
             </div>

@@ -7,9 +7,30 @@ async def run(files, opts, work_dir):
     doc = fitz.open(file_path)
     
     if pages_to_delete:
-        pages = [int(p.strip()) - 1 for p in pages_to_delete.split(",") if p.strip().isdigit()]
-        pages.sort(reverse=True)
-        for p in pages:
+        pages = set()
+        parts = pages_to_delete.split(",")
+        for part in parts:
+            part = part.strip()
+            if not part: continue
+            if "-" in part:
+                try:
+                    start, end = part.split("-")
+                    s = max(0, int(start.strip()) - 1)
+                    e = min(doc.page_count - 1, int(end.strip()) - 1)
+                    for i in range(s, e + 1):
+                        pages.add(i)
+                except ValueError:
+                    pass
+            else:
+                try:
+                    p = int(part) - 1
+                    if 0 <= p < doc.page_count:
+                        pages.add(p)
+                except ValueError:
+                    pass
+                    
+        sorted_pages = sorted(list(pages), reverse=True)
+        for p in sorted_pages:
             if 0 <= p < doc.page_count:
                 doc.delete_page(p)
                 
