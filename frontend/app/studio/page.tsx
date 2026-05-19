@@ -121,7 +121,7 @@ function StudioContent() {
                        <h4 className="font-semibold text-[14px] text-gray-900">{opt.name}</h4>
                        <p className="text-[12px] text-gray-500">{(opt.size_bytes / (1024*1024)).toFixed(2)} MB</p>
                      </div>
-                     <a href={`http://127.0.0.1:8000${opt.url}`} download target="_blank" rel="noreferrer" className="bg-black text-white px-4 py-2 rounded-lg text-[13px] font-medium hover:bg-gray-800 shrink-0">
+                     <a href={opt.url} download target="_blank" rel="noreferrer" className="bg-black text-white px-4 py-2 rounded-lg text-[13px] font-medium hover:bg-gray-800 shrink-0">
                        Download
                      </a>
                    </div>
@@ -140,7 +140,7 @@ function StudioContent() {
                <p className="text-[14px] text-gray-500 mb-8">{result.name} ({(result.size/(1024*1024)).toFixed(2)} MB)</p>
                
                <a 
-                 href={`http://127.0.0.1:8000${result.url}`} 
+                  href={result.url} 
                  download
                  target="_blank"
                  rel="noreferrer"

@@ -5,9 +5,7 @@ export const processFile = async (files: File[], tool: string, options: any) => 
   form.append('tool', tool)
   form.append('options', JSON.stringify(options))
 
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL
-
-  const res = await fetch(`${apiUrl}/api/process`, {
+  const res = await fetch('/api/process', {
     method: 'POST',
     body: form,
   })

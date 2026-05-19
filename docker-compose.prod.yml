@@ -6,23 +6,24 @@ services:
     container_name: xstudio_backend
     restart: always
     ports:
-      - "8001:8000"
+      - "8001:8001"
     networks:
       - xstudio_net
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    command: uvicorn main:app --host 0.0.0.0 --port 8001
 
   frontend:
     build: ./frontend
     container_name: xstudio_frontend
     restart: always
     ports:
-      - "3001:3000"
+      - "3001:3001"
     environment:
-      - NEXT_PUBLIC_API_URL=https://api.xstudio.solaymantech.me
+      - BACKEND_ORIGIN=http://backend:8001
     depends_on:
       - backend
     networks:
       - xstudio_net
+    command: npm run start -- -p 3001 -H 0.0.0.0
 
 networks:
   xstudio_net:

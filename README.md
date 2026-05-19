@@ -42,6 +42,9 @@ make dev-down
 - **Client Application**: [http://localhost:3001](http://localhost:3001)
 - **FastAPI OpenAPI Swagger**: [http://localhost:8001/docs](http://localhost:8001/docs)
 
+### API Routing
+The frontend calls relative `/api` and `/files` paths. In development, `BACKEND_ORIGIN` enables a Next.js rewrite proxy (already set in docker-compose). In production, Nginx should proxy `/api` and `/files` to the backend service.
+
 ## 📂 Project Structure
 
 ```text
