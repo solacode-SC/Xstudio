@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: xstudio_backend
+    restart: always
+    expose:
+      - "8000"
+    networks:
+      - xstudio_net
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+
+  frontend:
+    build: ./frontend
+    container_name: xstudio_frontend
+    restart: always
+    ports:
+      - "3001:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=https://api.xstudio.solaymantech.me
+    depends_on:
+      - backend
+    networks:
+      - xstudio_net
+
+networks:
+  xstudio_net:
+    driver: bridge

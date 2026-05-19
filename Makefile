@@ -1,39 +1,23 @@
-.PHONY: up down restart rebuild logs clean reset
+.PHONY: dev dev-down prod prod-down logs
 
-GREEN  := \033[0;32m
+GREEN := \033[0;32m
+CYAN := \033[0;36m
 YELLOW := \033[0;33m
-CYAN   := \033[0;36m
-RESET  := \033[0m
+RESET := \033[0m
 
-up:
-	@echo "$(GREEN)▶ Starting Xstudio...$(RESET)"
-	docker compose up -d
-	@echo "$(CYAN)→ Frontend: http://localhost:3000$(RESET)"
-	@echo "$(CYAN)→ Backend:  http://localhost:8000$(RESET)"
+dev:
+	@echo "$(CYAN)▶ XSTUDIO DEV MODE (ports 3001/8001)$(RESET)"
+	docker compose -f docker-compose.dev.yml up --build
 
-down:
-	@echo "$(YELLOW)■ Stopping Xstudio...$(RESET)"
-	docker compose down
+dev-down:
+	docker compose -f docker-compose.dev.yml down
 
-restart:
-	@echo "$(YELLOW)↻ Restarting...$(RESET)"
-	docker compose restart
+prod:
+	@echo "$(GREEN)▶ XSTUDIO PROD MODE (ports 3001/8001)$(RESET)"
+	docker compose -f docker-compose.prod.yml up -d --build
 
-rebuild:
-	@echo "$(CYAN)⟳ Rebuilding containers...$(RESET)"
-	docker compose down
-	docker compose build --no-cache
-	docker compose up -d
+prod-down:
+	docker compose -f docker-compose.prod.yml down
 
 logs:
 	docker compose logs -f
-
-clean:
-	@echo "$(YELLOW)✗ Removing containers...$(RESET)"
-	docker compose down --remove-orphans
-
-reset:
-	@echo "$(YELLOW)⚠ Full reset — removing volumes + rebuild...$(RESET)"
-	docker compose down -v --remove-orphans
-	docker compose build --no-cache
-	docker compose up -d

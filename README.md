@@ -28,22 +28,19 @@ Xstudio utilizes a fully containerized monorepo setup:
 The entire environment is orchestrated via the provided `Makefile` for a friction-less developer experience. Ensure you have Docker installed.
 
 ```bash
-# 1. Start the stack (Backend & Frontend)
-make up
+# 1. Start the dev stack (Backend & Frontend)
+make dev
 
 # 2. View live logs across both containers
 make logs
 
-# 3. Rebuild from scratch (bypassing cache)
-make rebuild
-
-# 4. Destroy containers, networks, and orphaned volumes
-make clean
+# 3. Stop the dev stack
+make dev-down
 ```
 
 ### Accessing the App:
-- **Client Application**: [http://localhost:3000](http://localhost:3000)
-- **FastAPI OpenAPI Swagger**: [http://localhost:8000/docs](http://localhost:8000/docs) *(Internal API bound to `127.0.0.1`)*
+- **Client Application**: [http://localhost:3001](http://localhost:3001)
+- **FastAPI OpenAPI Swagger**: [http://localhost:8001/docs](http://localhost:8001/docs)
 
 ## 📂 Project Structure
 
@@ -57,8 +54,10 @@ xstudio/
 │   ├── routers/       # FastAPI routing logic (process.py)
 │   ├── tools/         # 9 discrete PDF utility modules
 │   └── utils/         # Async garbage collection daemon
-├── docker-compose.yml # Container orchestration
-└── Makefile           # Dev-ops automation
+├── docker-compose.dev.yml  # Dev mode stack
+├── docker-compose.prod.yml # Prod mode stack
+├── docker-compose.yml      # Legacy single-mode compose
+└── Makefile                # Dev-ops automation
 ```
 
 ## 🔒 Security & Data Privacy
