@@ -12,7 +12,10 @@ services:
     command: uvicorn main:app --host 0.0.0.0 --port 8001
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        - BACKEND_ORIGIN=http://backend:8001
     container_name: xstudio_frontend
     restart: always
     ports:

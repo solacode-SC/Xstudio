@@ -13,7 +13,10 @@ services:
       - ENV=development
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        - BACKEND_ORIGIN=http://backend:8001
     container_name: xstudio_frontend_dev
     ports:
       - "3001:3001"

@@ -2,7 +2,10 @@ version: '3.8'
 
 services:
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        - BACKEND_ORIGIN=http://backend:8001
     ports: ["3001:3001"]
     environment:
       - BACKEND_ORIGIN=http://backend:8001
