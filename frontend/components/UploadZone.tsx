@@ -1,6 +1,6 @@
 'use client'
 import { useCallback, useState } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { useDropzone, type Accept } from 'react-dropzone'
 import { UploadCloud, X, GripVertical } from 'lucide-react'
 
 export default function UploadZone({ onUpload, files, onRemove, acceptType = 'pdf', multiple = true, onReorder }: { onUpload: (files: File[]) => void, files: File[], onRemove: (index: number) => void, acceptType?: 'pdf' | 'image', multiple?: boolean, onReorder?: (newFiles: File[]) => void }) {
@@ -8,7 +8,7 @@ export default function UploadZone({ onUpload, files, onRemove, acceptType = 'pd
     onUpload(acceptedFiles)
   }, [onUpload])
 
-  const acceptConfig = acceptType === 'image' 
+  const acceptConfig: Accept = acceptType === 'image' 
     ? { 'image/jpeg': ['.jpg', '.jpeg'], 'image/png': ['.png'], 'image/webp': ['.webp'] }
     : { 'application/pdf': ['.pdf'] }
 

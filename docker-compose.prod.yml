@@ -5,8 +5,8 @@ services:
     build: ./backend
     container_name: xstudio_backend
     restart: always
-    expose:
-      - "8000"
+    ports:
+      - "8001:8000"
     networks:
       - xstudio_net
     command: uvicorn main:app --host 0.0.0.0 --port 8000
