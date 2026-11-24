@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" width="1200" height="420" fill="none">
+  <defs>
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#1F1F23" stroke-width="1"/>
+    </pattern>
+    <pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#3F3F46"/>
+    </pattern>
+  </defs>
+
+  <!-- Deep Obsidian Architectural Frame -->
+  <rect width="1200" height="420" rx="20" fill="#0A0A0B"/>
+  <rect x="1" y="1" width="1198" height="418" rx="19" stroke="#27272A" stroke-width="2"/>
+
+  <!-- Subtle Technical Grid -->
+  <rect x="24" y="24" width="1152" height="372" fill="url(#grid)" opacity="0.55"/>
+  <rect x="740" y="40" width="420" height="340" fill="url(#dots)" opacity="0.45"/>
+
+  <!-- Swiss Registration Crosshairs -->
+  <g stroke="#52525B" stroke-width="1.5">
+    <path d="M40 32V48M32 40H48"/>
+    <path d="M1160 32V48M1152 40H1168"/>
+    <path d="M40 372V388M32 380H48"/>
+    <path d="M1160 372V388M1152 380H1168"/>
+  </g>
+
+  <!-- Top Editorial Eyebrow Pill -->
+  <rect x="64" y="62" width="348" height="30" rx="6" fill="#18181B" stroke="#27272A"/>
+  <circle cx="82" cy="77" r="5" fill="#FF4D00"/>
+  <text x="98" y="81" fill="#E4E4E7" font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" font-size="11.5" font-weight="600" letter-spacing="1.6">
+    XSTUDIO ENGINE v2.0 // ZERO RETENTION
+  </text>
+
+  <!-- Main Monumental Title -->
+  <text x="62" y="182" fill="#FAFAFA" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="92" font-weight="800" letter-spacing="-3.5">
+    XSTUDIO
+  </text>
+  <rect x="502" y="116" width="16" height="16" fill="#FF4D00"/>
+
+  <!-- Architectural Subtitle -->
+  <text x="66" y="232" fill="#A1A1AA" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="22" font-weight="500" letter-spacing="-0.3">
+    Precision PDF Workbench — Lossless Vector &amp; Print-Grade Studio
+  </text>
+
+  <!-- Brutalist Vermilion Accent Rule -->
+  <rect x="66" y="256" width="110" height="5" fill="#FF4D00"/>
+  <rect x="184" y="256" width="340" height="1" y1="258" fill="#27272A"/>
+
+  <!-- Bottom Technical Spec Blocks -->
+  <g transform="translate(66, 292)">
+    <rect width="150" height="64" rx="10" fill="#121215" stroke="#27272A"/>
+    <text x="16" y="25" fill="#FF4D00" font-family="ui-monospace, SFMono-Regular, monospace" font-size="11" font-weight="700" letter-spacing="1">01 / SERVICES</text>
+    <text x="16" y="48" fill="#FAFAFA" font-family="system-ui, sans-serif" font-size="18" font-weight="700">12 Pro Tools</text>
+  </g>
+
+  <g transform="translate(230, 292)">
+    <rect width="162" height="64" rx="10" fill="#121215" stroke="#27272A"/>
+    <text x="16" y="25" fill="#FF4D00" font-family="ui-monospace, SFMono-Regular, monospace" font-size="11" font-weight="700" letter-spacing="1">02 / RESOLUTION</text>
+    <text x="16" y="48" fill="#FAFAFA" font-family="system-ui, sans-serif" font-size="18" font-weight="700">Up to 600 DPI</text>
+  </g>
+
+  <g transform="translate(406, 292)">
+    <rect width="166" height="64" rx="10" fill="#121215" stroke="#27272A"/>
+    <text x="16" y="25" fill="#FF4D00" font-family="ui-monospace, SFMono-Regular, monospace" font-size="11" font-weight="700" letter-spacing="1">03 / SECURITY</text>
+    <text x="16" y="48" fill="#FAFAFA" font-family="system-ui, sans-serif" font-size="18" font-weight="700">AES-256 + Wipe</text>
+  </g>
+
+  <!-- Right Isometric / Brutalist PDF Blueprint Card Stack -->
+  <g transform="translate(790, 70)">
+    <!-- Offset Shadow Block -->
+    <rect x="18" y="18" width="320" height="270" rx="16" fill="#FF4D00"/>
+    <!-- Main Blueprint Sheet -->
+    <rect x="0" y="0" width="320" height="270" rx="16" fill="#FAFAFA" stroke="#0A0A0B" stroke-width="3"/>
+    <!-- Card Header -->
+    <rect x="0" y="0" width="320" height="46" rx="14" fill="#0A0A0B"/>
+    <circle cx="22" cy="23" r="5" fill="#FF4D00"/>
+    <circle cx="38" cy="23" r="5" fill="#3F3F46"/>
+    <text x="188" y="27" fill="#A1A1AA" font-family="ui-monospace, SFMono-Regular, monospace" font-size="10.5" font-weight="600">
+      WORKBENCH // LIVE
+    </text>
+
+    <!-- Mini Page Thumbnails Inside Blueprint -->
+    <g transform="translate(22, 66)">
+      <rect width="82" height="106" rx="8" fill="#FFFFFF" stroke="#0A0A0B" stroke-width="2"/>
+      <rect x="12" y="16" width="44" height="6" rx="2" fill="#0A0A0B"/>
+      <rect x="12" y="28" width="58" height="4" rx="2" fill="#D4D4D8"/>
+      <rect x="12" y="38" width="52" height="4" rx="2" fill="#D4D4D8"/>
+      <rect x="12" y="54" width="58" height="32" rx="4" fill="#F4F4F5" stroke="#E4E4E7"/>
+      <text x="12" y="99" fill="#0A0A0B" font-family="ui-monospace, monospace" font-size="9" font-weight="700">P.01</text>
+    </g>
+
+    <g transform="translate(118, 66)">
+      <rect width="82" height="106" rx="8" fill="#FFFFFF" stroke="#FF4D00" stroke-width="2.5"/>
+      <rect x="12" y="16" width="50" height="6" rx="2" fill="#FF4D00"/>
+      <rect x="12" y="28" width="58" height="4" rx="2" fill="#D4D4D8"/>
+      <rect x="12" y="38" width="46" height="4" rx="2" fill="#D4D4D8"/>
+      <rect x="12" y="54" width="58" height="32" rx="4" fill="#FFF7ED" stroke="#FDBA74"/>
+      <text x="12" y="99" fill="#FF4D00" font-family="ui-monospace, monospace" font-size="9" font-weight="700">300 DPI</text>
+    </g>
+
+    <g transform="translate(214, 66)">
+      <rect width="82" height="106" rx="8" fill="#FFFFFF" stroke="#0A0A0B" stroke-width="2"/>
+      <rect x="12" y="16" width="38" height="6" rx="2" fill="#0A0A0B"/>
+      <rect x="12" y="28" width="58" height="4" rx="2" fill="#D4D4D8"/>
+      <rect x="12" y="38" width="56" height="4" rx="2" fill="#D4D4D8"/>
+      <rect x="12" y="54" width="58" height="32" rx="4" fill="#F4F4F5" stroke="#E4E4E7"/>
+      <text x="12" y="99" fill="#0A0A0B" font-family="ui-monospace, monospace" font-size="9" font-weight="700">AES-256</text>
+    </g>
+
+    <!-- Bottom Output Spec Bar Inside Card -->
+    <rect x="22" y="192" width="274" height="54" rx="10" fill="#0A0A0B"/>
+    <text x="38" y="215" fill="#A1A1AA" font-family="ui-monospace, monospace" font-size="10">DOMAIN</text>
+    <text x="38" y="233" fill="#FFFFFF" font-family="ui-monospace, monospace" font-size="12" font-weight="700">xstudio.solaymanbuilds.com</text>
+    <circle cx="274" cy="219" r="7" fill="#10B981"/>
+  </g>
+</svg>

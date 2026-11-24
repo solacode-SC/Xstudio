@@ -1,83 +1,175 @@
 'use client'
 import Link from 'next/link'
-import { LayoutDashboard, Scissors, Layers, Archive, RotateCw, Trash2, Copy, Image, FileImage, FileText, ChevronDown, X } from 'lucide-react'
-import { useState } from 'react'
+import { LayoutDashboard, X, Shield } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { STUDIO_TOOLS, ToolCategory } from '@/lib/tools'
+import { getToolIcon } from '@/components/ToolIcon'
+import { checkEngineHealth } from '@/lib/api'
 
-export default function Sidebar({ activeTool, isOpen, onClose }: { activeTool: string, isOpen?: boolean, onClose?: () => void }) {
-  const [dropdownOpen, setDropdownOpen] = useState(true)
+const SECTIONS: { key: ToolCategory; label: string }[] = [
+  { key: 'organize', label: 'Organize & Edit' },
+  { key: 'optimize', label: 'Optimize' },
+  { key: 'convert', label: 'Convert Studio' },
+  { key: 'security', label: 'Stamp & Security' },
+]
 
-  const tools = [
-    { id: 'split', title: 'Split PDF', icon: <Scissors className="w-[18px] h-[18px]" /> },
-    { id: 'merge', title: 'Merge PDFs', icon: <Layers className="w-[18px] h-[18px]" /> },
-    { id: 'compress', title: 'Compress PDF', icon: <Archive className="w-[18px] h-[18px]" /> },
-    { id: 'rotate', title: 'Rotate Pages', icon: <RotateCw className="w-[18px] h-[18px]" /> },
-    { id: 'delete', title: 'Delete Pages', icon: <Trash2 className="w-[18px] h-[18px]" /> },
-    { id: 'extract', title: 'Extract Pages', icon: <Copy className="w-[18px] h-[18px]" /> },
-    { id: 'pdf_to_images', title: 'PDF → Images', icon: <Image className="w-[18px] h-[18px]" /> },
-    { id: 'images_to_pdf', title: 'Images → PDF', icon: <FileImage className="w-[18px] h-[18px]" /> },
-    { id: 'pdf_to_word', title: 'PDF → Word', icon: <FileText className="w-[18px] h-[18px]" /> },
-  ]
+export default function Sidebar({
+  activeTool,
+  isOpen,
+  onClose,
+}: {
+  activeTool: string
+  isOpen?: boolean
+  onClose?: () => void
+}) {
+  const [online, setOnline] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    checkEngineHealth().then(setOnline)
+  }, [])
+
+  const closeMobile = () => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768 && onClose) {
+      onClose()
+    }
+  }
 
   return (
     <>
-      {/* Backdrop for mobile */}
       {isOpen && (
-        <div 
-          className="md:hidden fixed inset-0 bg-black/20 z-40" 
+        <div
+          className="md:hidden fixed inset-0 bg-black/40 backdrop-blur-[2px] z-40"
           onClick={onClose}
         />
       )}
 
-      <aside className={`w-[220px] bg-white border-r border-gray-200 flex flex-col h-screen shrink-0 fixed md:relative z-50 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
-        <div className="p-5 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="bg-black text-white p-1 rounded">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14 2 14 8 20 8"/>
-              </svg>
+      <aside
+        className={`w-[248px] bg-white border-r border-zinc-200 flex flex-col h-screen shrink-0 fixed md:sticky md:top-0 z-50 transition-transform duration-300 ${
+          isOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+        }`}
+      >
+        {/* Brand Header */}
+        <div className="h-[60px] px-5 border-b border-zinc-200 flex items-center justify-between shrink-0">
+          <Link href="/" onClick={closeMobile} className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 bg-[#0A0A0B] text-white rounded-lg flex items-center justify-center relative shadow-sm group-hover:bg-[#FF4D00] transition-colors">
+              <span className="font-display font-bold text-[15px] tracking-tighter">X</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF4D00] group-hover:bg-white absolute top-1.5 right-1.5 transition-colors" />
             </div>
-            <span className="font-bold text-gray-900 tracking-tight text-[15px]">Xstudio</span>
-          </div>
-          <button className="md:hidden text-gray-400 hover:text-gray-600" onClick={onClose}>
+            <div className="flex items-baseline gap-1.5">
+              <span className="font-display font-bold text-[#0A0A0B] tracking-tight text-[16px]">
+                Xstudio
+              </span>
+              <span className="font-mono text-[10px] font-medium px-1.5 py-0.5 rounded bg-zinc-100 text-zinc-600 border border-zinc-200">
+                2.0
+              </span>
+            </div>
+          </Link>
+          <button
+            className="md:hidden text-zinc-400 hover:text-zinc-900 p-1"
+            onClick={onClose}
+            aria-label="Close sidebar"
+          >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-3 py-2">
-          <div className="mb-4">
-            <div className="px-3 mb-2 text-[10px] uppercase tracking-widest font-semibold text-gray-400">Menu</div>
-            <Link href="/" onClick={() => { if(window.innerWidth < 768 && onClose) onClose() }}>
-              <div className={`flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] font-medium transition-colors cursor-pointer ${activeTool === 'home' ? 'bg-black text-white' : 'text-gray-700 hover:bg-gray-50'}`}>
-                <LayoutDashboard className="w-[18px] h-[18px]" />
-                <span>Studio</span>
+        {/* Navigation */}
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+          <div>
+            <Link href="/" onClick={closeMobile}>
+              <div
+                className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-[13px] font-semibold transition-all ${
+                  activeTool === 'home'
+                    ? 'bg-[#0A0A0B] text-white shadow-sm'
+                    : 'text-zinc-700 hover:bg-zinc-100'
+                }`}
+              >
+                <div className="flex items-center gap-2.5">
+                  <LayoutDashboard className="w-4 h-4" />
+                  <span>Studio Hub</span>
+                </div>
+                <span
+                  className={`font-mono text-[10px] ${
+                    activeTool === 'home' ? 'text-zinc-400' : 'text-zinc-400'
+                  }`}
+                >
+                  12
+                </span>
               </div>
             </Link>
-            
-            <div className="mt-1">
-              <div 
-                className="flex items-center justify-between px-3 py-2 rounded-lg text-[13px] font-medium text-gray-700 hover:bg-gray-50 cursor-pointer"
-                onClick={() => setDropdownOpen(!dropdownOpen)}
-              >
-                <div className="flex items-center gap-3">
-                  <Layers className="w-[18px] h-[18px]" />
-                  <span>PDF Tools</span>
+          </div>
+
+          {SECTIONS.map((sec) => {
+            const items = STUDIO_TOOLS.filter((t) => t.category === sec.key)
+            return (
+              <div key={sec.key}>
+                <div className="px-3 mb-1.5 font-mono text-[10px] uppercase tracking-[0.14em] font-semibold text-zinc-400">
+                  {sec.label}
                 </div>
-                <ChevronDown className={`w-4 h-4 transition-transform ${dropdownOpen ? '' : '-rotate-90'}`} />
+                <div className="space-y-0.5">
+                  {items.map((tool) => {
+                    const isActive = activeTool === tool.id
+                    return (
+                      <Link
+                        key={tool.id}
+                        href={`/studio?tool=${tool.id}`}
+                        onClick={closeMobile}
+                      >
+                        <div
+                          className={`flex items-center justify-between px-3 py-2 rounded-lg text-[12.5px] transition-all ${
+                            isActive
+                              ? 'bg-zinc-900 text-white font-semibold shadow-sm'
+                              : 'text-zinc-600 hover:text-zinc-950 hover:bg-zinc-100/80 font-medium'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0">
+                            <span
+                              className={
+                                isActive ? 'text-[#FF4D00]' : 'text-zinc-400'
+                              }
+                            >
+                              {getToolIcon(tool.id, 'w-4 h-4')}
+                            </span>
+                            <span className="truncate">{tool.shortTitle}</span>
+                          </div>
+                          <span
+                            className={`font-mono text-[10px] ${
+                              isActive ? 'text-zinc-400' : 'text-zinc-300'
+                            }`}
+                          >
+                            {tool.code}
+                          </span>
+                        </div>
+                      </Link>
+                    )
+                  })}
+                </div>
               </div>
-              
-              {dropdownOpen && (
-                <div className="mt-1 ml-4 pl-3 border-l border-gray-100 flex flex-col gap-1">
-                  {tools.map(tool => (
-                    <Link key={tool.id} href={`/studio?tool=${tool.id}`} onClick={() => { if(window.innerWidth < 768 && onClose) onClose() }}>
-                      <div className={`px-3 py-1.5 rounded-md text-[12px] transition-colors ${activeTool === tool.id ? 'font-semibold text-black bg-gray-50' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}>
-                        {tool.title}
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
+            )
+          })}
+        </div>
+
+        {/* Footer Privacy & Engine Status */}
+        <div className="p-3 border-t border-zinc-200 bg-zinc-50/70 shrink-0">
+          <div className="rounded-xl border border-zinc-200 bg-white p-3">
+            <div className="flex items-center justify-between mb-1.5">
+              <div className="flex items-center gap-1.5">
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    online === false
+                      ? 'bg-amber-500'
+                      : 'bg-emerald-500 animate-pulse'
+                  }`}
+                />
+                <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-zinc-800">
+                  {online === false ? 'Standby' : 'Engine Ready'}
+                </span>
+              </div>
+              <Shield className="w-3.5 h-3.5 text-zinc-400" />
             </div>
+            <p className="text-[11px] text-zinc-500 leading-snug">
+              Zero-retention workspace. Temporary files auto-purge every 10 min.
+            </p>
           </div>
         </div>
       </aside>
